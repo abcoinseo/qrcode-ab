@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+        }
+        header {
+            background-color: #222;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #f39c12;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #e67e22;
+        }
+        #qr-code {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        footer {
+            background-color: #222;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        footer a {
+            color: #f39c12;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    AB Studio
+</header>
+
+<div class="container">
+    <input type="text" id="text-input" placeholder="Enter text to generate QR code" />
+    <button onclick="generateQRCode()">Generate QR Code</button>
+    <div id="qr-code-container">
+        <canvas id="qr-code"></canvas>
+    </div>
+    <button id="download-button" style="display: none;" onclick="downloadQRCode()">Download QR Code</button>
+</div>
+
+<footer>
+    Powered by <a href="https://www.abstudio.com" target="_blank">AB Studio</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script>
+    function generateQRCode() {
+        const textInput = document.getElementById('text-input').value;
+        if (textInput.trim() === '') {
+            alert('Please enter some text!');
+            return;
+        }
+
+        const qrCodeCanvas = document.getElementById('qr-code');
+        const downloadButton = document.getElementById('download-button');
+        
+        QRCode.toCanvas(qrCodeCanvas, textInput, function (error) {
+            if (error) {
+                console.error(error);
+            } else {
+                downloadButton.style.display = 'inline-block';
+            }
+        });
+    }
+
+    function downloadQRCode() {
+        const qrCodeCanvas = document.getElementById('qr-code');
+        const dataUrl = qrCodeCanvas.toDataURL();
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = 'qr_code.png';
+        a.click();
+    }
+</script>
+
+</body>
+</html>
